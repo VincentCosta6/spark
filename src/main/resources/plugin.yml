@@ -1,0 +1,7 @@
+name: paper-framework
+version: '${version}'
+main: live.artgen.paperframework.impl.PluginEntry
+api-version: '1.20'
+commands:
+  test:
+    description: Sends a test ping to the player it was sent to
