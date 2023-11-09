@@ -12,6 +12,9 @@ permissions:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.head_ref || github.ref }}
+      cancel-in-progress: false
 
     steps:
       - uses: actions/checkout@v2
