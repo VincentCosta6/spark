@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github'
-version = '0.2.7-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
