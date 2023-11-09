@@ -35,9 +35,7 @@ jobs:
       - name: Check if tag already exists
         id: check_tag
         run: |
-          TAG_EXISTS=$(git tag -l "${{ steps.get_version.outputs.PROJECT_VERSION }}")
-          echo TAG_EXISTS
-          if [[ -z "$TAG_EXISTS" ]]; then
+          if git rev-parse "refs/tags/${{ env.PROJECT_VERSION }}" >/dev/null 2>&1; then
             echo "Tag already exists, skipping publication."
             echo "TAG_EXISTS=true" >> $GITHUB_ENV
           else
