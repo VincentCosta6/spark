@@ -21,4 +21,6 @@ gradle-app.setting
 .classpath
 
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
+
 run/
