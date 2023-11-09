@@ -35,21 +35,24 @@ jobs:
       - name: Check if tag already exists
         id: check_tag
         run: |
-          if git rev-parse "refs/tags/${{ steps.get_version.outputs.VERSION }}" >/dev/null 2>&1; then
-            echo "::set-output name=TAG_EXISTS::yes"
+          TAG_EXISTS=$(git tag -l "${{ steps.get_version.outputs.VERSION }}")
+          if [[ -z "$TAG_EXISTS" ]]; then
+            echo "Tag does not exist, proceeding with publication."
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
           else
-            echo "::set-output name=TAG_EXISTS::no"
+            echo "Tag already exists, skipping publication."
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
           fi
 
       - name: Build and publish
-        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        if: env.TAG_EXISTS == 'false'
         run: ./gradlew publishMavenJavaPublicationToGithubRepository
         env:
           GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}  # Your GitHub username or organization name
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}       # This is the GitHub token
 
       - name: Create GitHub Release
-        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        if: env.TAG_EXISTS == 'false'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -61,11 +64,11 @@ jobs:
           prerelease: true
 
       - name: List build artifacts
-        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        if: env.TAG_EXISTS == 'false'
         run: ls -la ./build/libs/
 
       - name: Upload JAR to GitHub Release
-        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        if: env.TAG_EXISTS == 'false'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
