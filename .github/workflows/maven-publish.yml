@@ -30,17 +30,17 @@ jobs:
 
       - name: Get project version
         id: get_version
-        run: echo "::set-output name=VERSION::$(./gradlew properties -q | grep "version:" | awk '{print $2}')"
+        run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_OUTPUT
 
       - name: Check if tag already exists
         id: check_tag
         run: |
-          TAG_EXISTS=$(git tag -l "${{ steps.get_version.outputs.VERSION }}")
+          TAG_EXISTS=$(git tag -l "${{ steps.get_version.outputs.PROJECT_VERSION }}")
           if [[ -z "$TAG_EXISTS" ]]; then
-            echo "Tag does not exist, proceeding with publication."
+            echo "Tag already exists, skipping publication."
             echo "TAG_EXISTS=true" >> $GITHUB_ENV
           else
-            echo "Tag already exists, skipping publication."
+            echo "Tag does not exist, proceeding with publication."
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
           fi
 
