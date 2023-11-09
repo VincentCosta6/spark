@@ -30,7 +30,8 @@ jobs:
 
       - name: Get project version
         id: get_version
-        run: echo "PROJECT_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_OUTPUT
+        run: |
+          echo "PROJECT_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Check if tag already exists
         id: check_tag
@@ -57,8 +58,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          tag_name: ${{ env.PROJECT_VERSION }}
+          release_name: Release ${{ env.PROJECT_VERSION }}
           draft: false
           prerelease: true
 
@@ -73,6 +74,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/libs/spark-${{ steps.get_version.outputs.VERSION }}.jar
-          asset_name: spark-${{ steps.get_version.outputs.VERSION }}.jar
+          asset_path: ./build/libs/spark-${{ env.PROJECT_VERSION }}-dist.jar
+          asset_name: spark-${{ env.PROJECT_VERSION }}-dist.jar
           asset_content_type: application/java-archive
