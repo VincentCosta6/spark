@@ -24,22 +24,5 @@ public class PlayerMove implements Listener {
 
         framework.log(playerState.toString());
         playerState.magicka -= 1;
-        framework.saveDataStores();
-
-
-
-        int distanceToSpawn = 1;
-        int fireballVelocity = 5;
-
-        Location eyeLocation = player.getEyeLocation();
-        Vector direction = eyeLocation.getDirection();
-
-        Location fireballSpawnPoint = eyeLocation.add(direction.clone().multiply(distanceToSpawn));
-
-        Fireball fireball = player.getWorld().spawn(fireballSpawnPoint, Fireball.class);
-        fireball.setDirection(direction);
-        fireball.setVelocity(direction.multiply(fireballVelocity));
-
-//        player.getWorld().
     }
 }
