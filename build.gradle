@@ -4,7 +4,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-group = 'live.artgen'
+group = 'com.github'
 version = '1.0-SNAPSHOT'
 
 repositories {
