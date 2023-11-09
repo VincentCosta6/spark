@@ -1,12 +1,13 @@
 plugins {
     id 'java'
+    id 'java-library'
     id("xyz.jpenilla.run-paper") version "2.2.0"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'maven-publish'
 }
 
 group = 'com.github'
-version = '0.1.0-SNAPSHOT'
+version = '0.2.6-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -22,14 +23,14 @@ repositories {
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT"
-    implementation 'com.google.inject:guice:3.0'
+    api 'com.google.inject:guice:3.0'
 }
 
-shadowJar {
-    archiveBaseName.set('my-app') // Change 'my-app' to your desired name
-    archiveVersion.set('0.1.0') // Your version
-    archiveClassifier.set('')
-}
+//shadowJar {
+//    archiveBaseName.set('shadow-jar') // Change 'my-app' to your desired name
+//    archiveVersion.set(version) // Your version
+//    archiveClassifier.set('')
+//}
 
 def targetJavaVersion = 17
 java {
@@ -66,6 +67,12 @@ processResources {
     }
 }
 
+task publishableJar(type: Jar) {
+    from sourceSets.main.output
+    exclude '**/com/github/spark/examples/**'  // Adjust the path if your examples package is nested differently
+    archiveFileName = "spark-${project.version}-dist.jar"
+}
+
 publishing {
     repositories {
         maven {
@@ -73,14 +80,15 @@ publishing {
             url = uri("https://maven.pkg.github.com/VincentCosta6/spark")
             credentials {
                 username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_TOKEN")
+                password = System.getenv("GITHUB_PASSWORD")
             }
         }
     }
     publications {
         mavenJava(MavenPublication) {
-            // Use the artifact method to point to the jar file explicitly
-            artifact(file('build/libs/spark-0.1.0-SNAPSHOT.jar'))
+            artifact publishableJar
+//            artifact(file("build/libs/spark-${version}.jar"))
+
             pom {
                 name = 'Spark'
                 description = 'Spark, the framework that allows for rapid prototyping of Bukkit plugins'

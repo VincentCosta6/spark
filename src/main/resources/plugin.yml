@@ -1,6 +1,6 @@
-name: paper-framework
+name: spark-examples
 version: '${version}'
-main: live.artgen.paperframework.impl.PluginEntry
+main: com.github.spark.examples.PluginEntry
 api-version: '1.20'
 commands:
   test:
