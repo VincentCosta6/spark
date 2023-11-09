@@ -60,6 +60,10 @@ jobs:
           draft: false
           prerelease: true
 
+      - name: List build artifacts
+        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        run: ls -la ./build/libs/
+
       - name: Upload JAR to GitHub Release
         if: steps.check_tag.outputs.TAG_EXISTS == 'no'
         uses: actions/upload-release-asset@v1
