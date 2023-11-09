@@ -1,8 +1,9 @@
 name: Gradle Publish
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -27,8 +28,45 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Get project version
+        id: get_version
+        run: echo "::set-output name=VERSION::$(./gradlew properties -q | grep "version:" | awk '{print $2}')"
+
+      - name: Check if tag already exists
+        id: check_tag
+        run: |
+          if git rev-parse "refs/tags/${{ steps.get_version.outputs.VERSION }}" >/dev/null 2>&1; then
+            echo "::set-output name=TAG_EXISTS::yes"
+          else
+            echo "::set-output name=TAG_EXISTS::no"
+          fi
+
       - name: Build and publish
+        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
         run: ./gradlew publishMavenJavaPublicationToGithubRepository
         env:
           GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}  # Your GitHub username or organization name
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}       # This is the GitHub token
+
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          draft: false
+          prerelease: true
+
+      - name: Upload JAR to GitHub Release
+        if: steps.check_tag.outputs.TAG_EXISTS == 'no'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/libs/spark-${{ steps.get_version.outputs.VERSION }}.jar
+          asset_name: spark-${{ steps.get_version.outputs.VERSION }}.jar
+          asset_content_type: application/java-archive
