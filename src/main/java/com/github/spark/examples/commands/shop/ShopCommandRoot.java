@@ -15,11 +15,11 @@ public class ShopCommandRoot implements Command {
 
     @CommandHandler(name = "buy", description = "usage: /shop buy [item-id] [amount]")
     public boolean onBuyCommand(CommandEventContext context) {
-
+        return false;
     }
 
     @CommandHandler(name = "sell", description = "usage: /shop sell [item-id] [amount] or /shop sell (sells item in your hand)")
     public boolean onSellCommand(CommandEventContext context) {
-
+        return false;
     }
 }

@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.2.0"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'maven-publish'
 }
 
 group = 'com.github'
@@ -62,5 +63,29 @@ processResources {
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "Github"
+            url = uri("https://maven.pkg.github.com/VincentCosta6/spark")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            // Use the artifact method to point to the jar file explicitly
+            artifact(file('build/libs/spark-0.1.0-SNAPSHOT.jar'))
+            pom {
+                name = 'Spark'
+                description = 'Spark, the framework that allows for rapid prototyping of Bukkit plugins'
+                url = 'https://github.com/VincentCosta6/spark'
+            }
+        }
     }
 }

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/live.artgen.paper-framework.main.iml" filepath="$PROJECT_DIR$/.idea/modules/live.artgen.paper-framework.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/paper-framework.main.iml" filepath="$PROJECT_DIR$/.idea/modules/paper-framework.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spark.main.iml" filepath="$PROJECT_DIR$/.idea/modules/spark.main.iml" />
     </modules>
   </component>
 </project>
