@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
 
       - name: List gradle wrapper directory
         run: ls -la gradle/wrapper
@@ -40,7 +42,7 @@ jobs:
         id: check_tag
         run: |
           echo "${{ env.PROJECT_VERSION }}"
-          echo git tag -l
+          git tag -l
           if [ $(git tag -l "${{ env.PROJECT_VERSION }}") ]; then
             echo "Tag already exists, skipping publication."
             echo "TAG_EXISTS=true" >> $GITHUB_ENV
