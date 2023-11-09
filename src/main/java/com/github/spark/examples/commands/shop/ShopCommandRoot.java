@@ -7,7 +7,7 @@ import com.github.spark.lib.commands.CommandEventContext;
 @CommandHandler(name = "shop", description = "buy/sell shop items")
 public class ShopCommandRoot implements Command {
     public boolean onCommand(CommandEventContext context) {
-
+        return false;
     }
 
     @CommandHandler(name = "admin")
