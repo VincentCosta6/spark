@@ -1,5 +1,6 @@
 
-![DALLE_2023-11-08_23 03 53_-_Design_a_modern_and_minimalist_icon_for_a_Java_framework_called_Spark_which_is_used_for_rapidly_prototyping_bukkit_plugins _The_icon_should_symboli_512x512](https://github.com/VincentCosta6/spark/assets/37250561/2e248d9f-7680-4eda-a8c1-778380ddec4a)
+![DALLE_2023-11-08_23 10 02_-_Create_a_modern_and_minimalist_icon_of_a_spark _The_design_should_be_clean_and_simple_conveying_the_potential_for_something_larger_to_emerge_from_it_512x512](https://github.com/VincentCosta6/spark/assets/37250561/d88329d2-62c4-4d65-9a7c-6b4d70158d2b)
+
 
 
 # spark
