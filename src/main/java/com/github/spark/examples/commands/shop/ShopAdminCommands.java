@@ -12,5 +12,9 @@ public class ShopAdminCommands implements Command {
         return false;
     }
 
-
+    @CommandHandler(name = "add-item", description = "usage: add-item [item-id] [amount]")
+    public boolean onBuyCommand(CommandContext context) {
+        context.playerCommandEvent().player().sendMessage("add item command!");
+        return false;
+    }
 }
