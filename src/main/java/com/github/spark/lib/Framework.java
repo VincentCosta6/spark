@@ -1,6 +1,7 @@
 package com.github.spark.lib;
 
 import com.github.spark.lib.command_trees.CommandTree;
+import com.github.spark.lib.commands.CommandRegistry;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreRegistry;
 import com.github.spark.lib.modules.FrameworkModule;
@@ -14,6 +15,8 @@ import java.util.logging.Level;
 
 public class Framework {
     public HashMap<String, CommandTree> commands = new HashMap<>();
+
+    public CommandRegistry commandRegistry;
     public DataStoreRegistry dataStoreRegistry;
 
     private final SparkPlugin plugin;
@@ -22,8 +25,10 @@ public class Framework {
     public Framework(SparkPlugin plugin) {
         this.plugin = plugin;
         dataStoreRegistry = new DataStoreRegistry(this);
+        commandRegistry = new CommandRegistry(this);
     }
 
+    @Deprecated
     public void addCommand(CommandTree command) {
         injector.injectMembers(command);
 
@@ -35,6 +40,10 @@ public class Framework {
         injector.injectMembers(listener);
 
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+    }
+
+    public void loadCommands() {
+        commandRegistry.findAndRegisterCommands();
     }
 
     public void handleStoresLoaded() {
@@ -52,6 +61,10 @@ public class Framework {
             var store = it.next();
             store.onSave(dataFolder);
         }
+    }
+
+    public void injectMembers(Object object) {
+        injector.injectMembers(object);
     }
 
     public void log(String message) {

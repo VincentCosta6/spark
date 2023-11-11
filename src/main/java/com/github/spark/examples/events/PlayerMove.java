@@ -3,15 +3,12 @@ package com.github.spark.examples.events;
 import com.github.spark.examples.datastores.PlayerState;
 import com.github.spark.examples.datastores.PlayerStateDataStore;
 import com.github.spark.lib.Framework;
-import org.bukkit.Location;
-import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.google.inject.Inject;
-import org.bukkit.util.Vector;
 
 public class PlayerMove implements Listener {
     @Inject Framework framework;

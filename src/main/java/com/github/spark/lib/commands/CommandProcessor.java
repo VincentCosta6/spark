@@ -14,9 +14,8 @@ import java.io.Writer;
 import java.util.Set;
 
 @SupportedAnnotationTypes("CommandHandler")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class CommandProcessor extends AbstractProcessor {
-
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         StringBuilder yaml = new StringBuilder("commands:\n");
