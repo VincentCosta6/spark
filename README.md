@@ -14,7 +14,7 @@ The purpose of this framework is to simplify the development process of plugins.
   - [ ] Automatic `plugin.yml` generation with annotations 
 - [x] Serializable Key value datastores
 - [ ] Annotation based registration
-  - [ ] Commands
+  - [x] Commands
   - [ ] Events
   - [ ] Datastores
 - [ ] Extensive and configurable permission system

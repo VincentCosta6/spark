@@ -1,14 +1,19 @@
 package com.github.spark.examples.commands.shop;
 
+import com.github.spark.lib.Framework;
 import com.github.spark.lib.commands.Command;
 import com.github.spark.lib.commands.CommandHandler;
 import com.github.spark.lib.commands.CommandEventContext;
 import com.github.spark.lib.commands.dto.CommandContext;
+import com.google.inject.Inject;
 
 @CommandHandler(name = "shop", description = "buy/sell shop items", root = true)
 public class ShopCommandRoot implements Command {
+    @Inject Framework framework;
+
     public boolean onCommand(CommandContext context) {
         context.playerCommandEvent().player().sendMessage("shop command!");
+        framework.log("hello");
         return false;
     }
 
