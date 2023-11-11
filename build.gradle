@@ -27,6 +27,10 @@ dependencies {
     api 'com.google.inject:guice:3.0'
 }
 
+tasks.named("shadowJar").configure {
+    enabled = false
+}
+
 //shadowJar {
 //    archiveBaseName.set('shadow-jar')
 //    archiveVersion.set(version)
@@ -86,12 +90,11 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
 
-            artifactId = 'spark'
             artifact(publishableJar) {
-                builtBy publishableJar
+                classifier = 'dist'
             }
-//            artifact(file("build/libs/spark-${version}.jar"))
 
+            artifactId = 'spark'
             pom {
                 name = 'Spark'
                 description = 'Spark, the framework that allows for rapid prototyping of Bukkit plugins'
