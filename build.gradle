@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github'
-version = '0.2.0-SNAPSHOT'
+version = '0.2.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,8 +28,8 @@ dependencies {
 }
 
 //shadowJar {
-//    archiveBaseName.set('shadow-jar') // Change 'my-app' to your desired name
-//    archiveVersion.set(version) // Your version
+//    archiveBaseName.set('shadow-jar')
+//    archiveVersion.set(version)
 //    archiveClassifier.set('')
 //}
 
@@ -52,9 +52,6 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks {
     runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
         minecraftVersion("1.20.2")
     }
 }
@@ -70,7 +67,7 @@ processResources {
 
 task publishableJar(type: Jar) {
     from sourceSets.main.output
-    exclude '**/com/github/spark/examples/**'  // Adjust the path if your examples package is nested differently
+    exclude '**/com/github/spark/examples/**'
     archiveFileName = "spark-${project.version}-dist.jar"
 }
 
@@ -87,7 +84,12 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
-            artifact publishableJar
+            from components.java
+
+            artifactId = 'spark'
+            artifact(publishableJar) {
+                builtBy publishableJar
+            }
 //            artifact(file("build/libs/spark-${version}.jar"))
 
             pom {
