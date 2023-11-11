@@ -1,20 +1,70 @@
 package com.github.spark.lib.commands.dto;
 
+import com.github.spark.lib.commands.Command;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandNode {
-    private String name;
-    private String description;
-    private Map<String, CommandNode> subCommands = new HashMap<>();
+    private final String name;
+    private final String description;
+    private final Method handler;
+    private final Command command;
 
-    public CommandNode(String name, String description) {
+    private CommandNode parentCommand;
+    private final Map<String, CommandNode> subCommands = new HashMap<>();
+
+    public CommandNode(CommandNode parentCommand, String name, String description, Command command, Method handler) {
+        this.parentCommand = parentCommand;
         this.name = name;
         this.description = description;
+        this.handler = handler;
+        this.command = command;
+    }
+
+    public CommandNode(CommandNode parentCommand, String name, String description, Command command) {
+        this.parentCommand = parentCommand;
+        this.name = name;
+        this.description = description;
+        this.command = command;
+        this.handler = null;
     }
 
     public void addSubCommand(CommandNode subCommand) {
         subCommands.put(subCommand.getName(), subCommand);
+    }
+
+    public boolean execute(CommandContext context) {
+        try {
+            if (this.handler == null) {
+                if (context.executionContext().restPaths().length == 0) {
+                    return command.onCommand(context);
+                }
+
+                String nextPath = context.executionContext().restPaths()[0];
+                CommandNode subCommand = subCommands.get(nextPath);
+                if (subCommand != null) {
+                    CommandContext newCommandContext = new CommandContext(
+                        context,
+                            context.playerCommandEvent(),
+                            new CommandNodeExecutionContext(
+                                nextPath,
+                                Arrays.stream(context.executionContext().restPaths()).skip(1).toArray(String[]::new)
+                            )
+                    );
+                    return subCommand.execute(newCommandContext);
+                }
+
+                return command.onCommand(context);
+            } else {
+                return (Boolean) handler.invoke(this.command, context);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // Getter methods

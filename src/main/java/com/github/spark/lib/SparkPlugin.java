@@ -13,8 +13,18 @@ public abstract class SparkPlugin extends JavaPlugin {
      */
     public abstract void onFrameworkEnable();
 
+    /**
+     * This is called before spark does anything
+     * Used for setting spark context properties
+     */
+    public void onBeforeFrameworkInitialize() {
+
+    }
+
     @Override
     public final void onEnable() {
+        onBeforeFrameworkInitialize();
+
         getLogger().log(Level.INFO, "[SPARK] Initializing Framework...");
 
         if (!getDataFolder().exists()) {
@@ -42,6 +52,7 @@ public abstract class SparkPlugin extends JavaPlugin {
         int newPluginCommandSize = framework.commands.size() - internalCommandSize;
         framework.log(Level.INFO, "Loaded " + newPluginCommandSize + " plugin command(s)", true);
 
+        this.framework.loadCommands();
         this.registerListeners();
 
         this.onFrameworkEnable();

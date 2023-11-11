@@ -3,6 +3,9 @@ package com.github.spark.lib.events;
 import com.github.spark.lib.command_trees.CommandTree;
 import com.github.spark.lib.command_trees.CommandTreeExecutionContext;
 import com.github.spark.lib.command_trees.PlayerCommandEvent;
+import com.github.spark.lib.commands.dto.CommandContext;
+import com.github.spark.lib.commands.dto.CommandNode;
+import com.github.spark.lib.commands.dto.CommandNodeExecutionContext;
 import com.google.inject.Inject;
 import com.github.spark.lib.Framework;
 import org.bukkit.entity.Player;
@@ -23,6 +26,19 @@ public class PlayerCommand implements Listener {
 
         int index = event.getMessage().indexOf(' ');
         String rootCommand = event.getMessage().substring(1, index != -1 ? index : event.getMessage().length());
+
+        CommandNode node = framework.commandRegistry.getCommand(rootCommand);
+        if (node != null) {
+            String[] path = event.getMessage().split(" ");
+
+            CommandContext newContext = new CommandContext(
+                null,
+                new PlayerCommandEvent(event.getPlayer(), path, rootCommand),
+                new CommandNodeExecutionContext(rootCommand, Arrays.stream(path).skip(1).toArray(String[]::new))
+            );
+            node.execute(newContext);
+            return;
+        }
 
         CommandTree treeExists = framework.commands.get(rootCommand);
         if (treeExists != null) {
