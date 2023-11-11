@@ -27,11 +27,11 @@ dependencies {
     api 'com.google.inject:guice:3.0'
 }
 
-shadowJar {
-    archiveBaseName.set('shadow-jar') // Change 'my-app' to your desired name
-    archiveVersion.set(version) // Your version
-    archiveClassifier.set('')
-}
+//shadowJar {
+//    archiveBaseName.set('shadow-jar') // Change 'my-app' to your desired name
+//    archiveVersion.set(version) // Your version
+//    archiveClassifier.set('')
+//}
 
 def targetJavaVersion = 17
 java {
