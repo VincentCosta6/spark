@@ -30,7 +30,6 @@ dependencies {
 tasks.named("shadowJar").configure {
     enabled = false
 }
-
 //shadowJar {
 //    archiveBaseName.set('shadow-jar')
 //    archiveVersion.set(version)
