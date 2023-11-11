@@ -3,10 +3,12 @@ package com.github.spark.examples.commands.shop;
 import com.github.spark.lib.commands.Command;
 import com.github.spark.lib.commands.CommandHandler;
 import com.github.spark.lib.commands.CommandEventContext;
+import com.github.spark.lib.commands.dto.CommandContext;
 
-@CommandHandler(name = "shop", description = "buy/sell shop items")
+@CommandHandler(name = "shop", description = "buy/sell shop items", root = true)
 public class ShopCommandRoot implements Command {
-    public boolean onCommand(CommandEventContext context) {
+    public boolean onCommand(CommandContext context) {
+        context.playerCommandEvent().player().sendMessage("shop command!");
         return false;
     }
 
@@ -14,12 +16,14 @@ public class ShopCommandRoot implements Command {
     public ShopAdminCommands adminCommands;
 
     @CommandHandler(name = "buy", description = "usage: /shop buy [item-id] [amount]")
-    public boolean onBuyCommand(CommandEventContext context) {
+    public boolean onBuyCommand(CommandContext context) {
+        context.playerCommandEvent().player().sendMessage("buy command!");
         return false;
     }
 
     @CommandHandler(name = "sell", description = "usage: /shop sell [item-id] [amount] or /shop sell (sells item in your hand)")
-    public boolean onSellCommand(CommandEventContext context) {
+    public boolean onSellCommand(CommandContext context) {
+        context.playerCommandEvent().player().sendMessage("sell command!");
         return false;
     }
 }

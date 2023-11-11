@@ -2,6 +2,7 @@ package com.github.spark.lib.commands;
 
 import com.github.spark.lib.Framework;
 import com.github.spark.lib.SparkContext;
+import com.github.spark.lib.commands.dto.CommandContext;
 import com.github.spark.lib.commands.dto.CommandNode;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -25,9 +26,11 @@ public class CommandRegistry {
 
         Set<Class<?>> commandHandlers = reflections.getTypesAnnotatedWith(CommandHandler.class);
         for (Class<?> handlerClass : commandHandlers) {
-            if (handlerClass.getEnclosingClass() == null) {
+            if (handlerClass.getEnclosingClass() == null && Command.class.isAssignableFrom(handlerClass)) {
                 try {
                     CommandHandler commandHandler = handlerClass.getAnnotation(CommandHandler.class);
+                    if (!commandHandler.root()) continue;
+
                     Object handlerInstance = handlerClass.getDeclaredConstructor().newInstance();
                     framework.injectMembers(handlerInstance);
                     CommandNode rootNode = new CommandNode(null,
@@ -44,21 +47,24 @@ public class CommandRegistry {
         }
     }
 
-    public void registerSubCommands(CommandNode parentNode, Class<?> parentDef, Command parentInstance) {
-        Class<?> clazz = parentDef.getClass();
-        for (Method method : clazz.getDeclaredMethods()) {
+    public void registerSubCommands(CommandNode parentNode, Class<?> parentDef, Command parentInstance) throws NoSuchMethodException {
+        for (Method method : parentDef.getDeclaredMethods()) {
+            method.setAccessible(true);
             CommandHandler commandHandlerAnnotation = method.getAnnotation(CommandHandler.class);
             if (commandHandlerAnnotation != null) {
-                CommandNode commandNode = new CommandNode(null,
+                Method commandMethod = parentInstance.getClass().getMethod(method.getName(), CommandContext.class);
+                commandMethod.setAccessible(true);
+                CommandNode commandNode = new CommandNode(parentNode,
                     commandHandlerAnnotation.name(),
                     commandHandlerAnnotation.description(),
-                    method
+                    parentInstance,
+                    commandMethod
                 );
-                commands.put(commandNode.getName(), commandNode);
+                parentNode.addSubCommand(commandNode);
             }
         }
 
-        for (Field field : clazz.getDeclaredFields()) {
+        for (Field field : parentDef.getDeclaredFields()) {
             CommandHandler subCommandAnnotation = field.getAnnotation(CommandHandler.class);
             if (subCommandAnnotation != null) {
                 try {
@@ -72,8 +78,9 @@ public class CommandRegistry {
                             parentNode,
                             subCommandAnnotation.name(),
                             subCommandAnnotation.description(),
-                            (Command) subCommandHandler // Fields don't directly have an executable method
+                            (Command) subCommandHandler
                     );
+                    parentNode.addSubCommand(subCommandRoot);
                     registerSubCommands(subCommandRoot, field.getType(), (Command) subCommandHandler);
                 } catch (Exception e) {
                     e.printStackTrace();
