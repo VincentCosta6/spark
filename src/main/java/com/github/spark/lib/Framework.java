@@ -1,5 +1,7 @@
 package com.github.spark.lib;
 
+import com.github.spark.lib.commands.CommandNode;
+import com.github.spark.lib.commands.CommandReflection;
 import com.github.spark.lib.commands.CommandRegistry;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreRegistry;
@@ -9,6 +11,7 @@ import com.google.inject.Injector;
 import org.bukkit.event.Listener;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class Framework {
@@ -31,7 +34,8 @@ public class Framework {
     }
 
     public void loadCommands() {
-        commandRegistry.findAndRegisterCommands();
+        ArrayList<CommandNode> commands = CommandReflection.findCommandNodes(this);
+        commands.forEach(commandNode -> commandRegistry.addCommand(commandNode.getName(), commandNode));
     }
 
     public void handleStoresLoaded() {
