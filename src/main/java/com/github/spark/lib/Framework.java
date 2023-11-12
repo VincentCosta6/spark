@@ -19,7 +19,7 @@ public class Framework {
     public CommandRegistry commandRegistry;
     public DataStoreRegistry dataStoreRegistry;
 
-    private final SparkPlugin plugin;
+    public final SparkPlugin plugin;
     private Injector injector;
 
     public Framework(SparkPlugin plugin) {

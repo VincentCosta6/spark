@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 
 public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, Serializable {
     private HashMap<String, T> map = new HashMap<>();
+    private String name = this.getClass().getSimpleName();
+    private int version = 0;
 
     public DataStore() {}
 
@@ -48,7 +50,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     @Override
     public void onSave(File folder) {
         try {
-            String fileName = getClass().getSimpleName() + ".store";
+            String fileName = name + ".store";
 
             File fileToWrite;
             File[] files = folder.listFiles();
@@ -69,17 +71,8 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
                 fileToWrite.createNewFile();
             }
 
-            T[] arrToWrite;
-            try {
-                T firstValue = map.values().iterator().next();
-                arrToWrite = map.values().toArray((T[]) Array.newInstance(firstValue.getClass(), map.size()));
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
-
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileToWrite))) {
-                oos.writeObject(arrToWrite);
+                oos.writeObject(this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -91,7 +84,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     @Override
     public void onLoad(File folder) {
         try {
-            String fileName = getClass().getSimpleName() + ".store";
+            String fileName = name + ".store";
 
             File fileToRead;
             File[] files = folder.listFiles();
@@ -113,10 +106,13 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
 
 
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileToRead))) {
-                T[] content = (T[]) ois.readObject();
-                for(T item : content) {
+                DataStore<T> dataStoreInFile = (DataStore<T>) ois.readObject();
+
+                for(T item : dataStoreInFile.map.values()) {
                     map.put(item.getItemId(), item);
                 }
+                setName(dataStoreInFile.getName());
+                setVersion(dataStoreInFile.getVersion());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -125,7 +121,21 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         }
     }
 
-    public abstract PlayerState getOrDefaultCreate(Player player, Supplier<PlayerState> defaultCreator);
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }
 
 

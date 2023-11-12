@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github'
-version = '0.2.1-SNAPSHOT'
+version = '0.3.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,13 +28,13 @@ dependencies {
 }
 
 tasks.named("shadowJar").configure {
-    enabled = false
+    enabled = System.getenv('GITHUB_ACTIONS') != 'true'
 }
-//shadowJar {
-//    archiveBaseName.set('shadow-jar')
-//    archiveVersion.set(version)
-//    archiveClassifier.set('')
-//}
+shadowJar {
+    archiveBaseName.set('shadow-jar')
+    archiveVersion.set(version)
+    archiveClassifier.set('')
+}
 
 def targetJavaVersion = 17
 java {

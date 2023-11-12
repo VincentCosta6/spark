@@ -36,7 +36,7 @@ public abstract class SparkPlugin extends JavaPlugin {
 
         /////////// LOAD PLUGIN STORES ///////////////////
         framework.log(Level.INFO, "Registering plugin datastores...", true);
-        registerDataStores();
+        onLoadDataStores();
 
         this.framework.handleStoresLoaded();
 
@@ -67,7 +67,10 @@ public abstract class SparkPlugin extends JavaPlugin {
         framework.addListener(new PlayerCommand());
     }
 
+    private void onLoadDataStores() {
+        framework.dataStoreRegistry.findAndRegisterDataStores();
+    }
+
     public void registerCommands() {}
     public void registerListeners() {}
-    public void registerDataStores() {}
 }
