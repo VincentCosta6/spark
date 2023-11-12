@@ -16,7 +16,7 @@ The purpose of this framework is to simplify the development process of plugins.
 - [ ] Annotation based registration
   - [x] Commands
   - [ ] Events
-  - [ ] Datastores
+  - [x] Datastores
 - [ ] Extensive and configurable permission system
   - [ ] Commands and command tree permissions
   - [ ] Events
