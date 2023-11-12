@@ -14,9 +14,4 @@ public final class PluginEntry extends SparkPlugin {
     public void onFrameworkEnable() {
         this.framework.log("Started");
     }
-
-    @Override
-    public void registerListeners() {
-        framework.addListener(new PlayerMove());
-    }
 }
