@@ -1,17 +1,13 @@
 package com.github.spark.lib.datastores;
 
-import com.github.spark.examples.datastores.PlayerState;
-import org.bukkit.entity.Player;
-
 import java.io.*;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Optional;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, Serializable {
+    public transient Field cachedPrimaryKey;
+
     private HashMap<String, T> map = new HashMap<>();
     private String name = this.getClass().getSimpleName();
     private int version = 0;
@@ -36,15 +32,53 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     }
 
     public T insert(T item) {
-        return map.put(item.getItemId(), item);
+        onItemCreated(item);
+        try {
+            return map.put((String) cachedPrimaryKey.get(item), item);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to compute primary key");
+        }
     }
 
     public T remove(String id) {
-        return map.remove(id);
+        T oldItem = map.remove(id);
+        onItemRemoved(oldItem);
+        return oldItem;
     }
 
     public int size() {
         return map.size();
+    }
+
+    public void clear() {
+        onDateStoreCleared();
+        map.clear();
+    }
+
+    public T changeKey(String oldKey, String newKey) {
+        T foundItem = findById(oldKey);
+        if (foundItem == null) {
+            return null;
+        }
+
+        remove(oldKey);
+        try {
+            cachedPrimaryKey.set(foundItem, newKey);
+        } catch (IllegalAccessException e) {
+
+        }
+        insert(foundItem);
+
+        return foundItem;
+    }
+
+    public void onDataStoreLoaded() {}
+    public void onDateStoreCleared() {}
+    public void onItemCreated(T newItem) {}
+    public void onItemRemoved(T oldItem) {}
+
+    public Iterator<T> getIterator() {
+        return map.values().iterator();
     }
 
     @Override
@@ -103,13 +137,11 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
                 return;
             }
 
-
-
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileToRead))) {
                 DataStore<T> dataStoreInFile = (DataStore<T>) ois.readObject();
 
                 for(T item : dataStoreInFile.map.values()) {
-                    map.put(item.getItemId(), item);
+                    map.put((String) cachedPrimaryKey.get(item), item);
                 }
                 setName(dataStoreInFile.getName());
                 setVersion(dataStoreInFile.getVersion());
@@ -119,6 +151,8 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        onDataStoreLoaded();
     }
 
     public String getName() {

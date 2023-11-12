@@ -3,7 +3,6 @@ package com.github.spark.lib.commands;
 import com.github.spark.lib.Framework;
 import com.github.spark.lib.SparkContext;
 import com.github.spark.lib.commands.dto.CommandContext;
-import com.github.spark.lib.commands.dto.CommandNode;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 

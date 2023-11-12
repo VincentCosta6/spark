@@ -1,4 +1,4 @@
-package com.github.spark.lib.commands;
+package com.github.spark.lib.commands.dto;
 
 import javax.annotation.Nullable;
 

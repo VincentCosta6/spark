@@ -1,6 +1,7 @@
-package com.github.spark.lib.commands.dto;
+package com.github.spark.lib.commands;
 
-import com.github.spark.lib.commands.Command;
+import com.github.spark.lib.commands.dto.CommandContext;
+import com.github.spark.lib.commands.dto.CommandNodeExecutionContext;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

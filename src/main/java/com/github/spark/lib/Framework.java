@@ -1,6 +1,5 @@
 package com.github.spark.lib;
 
-import com.github.spark.lib.command_trees.CommandTree;
 import com.github.spark.lib.commands.CommandRegistry;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreRegistry;
@@ -10,12 +9,9 @@ import com.google.inject.Injector;
 import org.bukkit.event.Listener;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.logging.Level;
 
 public class Framework {
-    public HashMap<String, CommandTree> commands = new HashMap<>();
-
     public CommandRegistry commandRegistry;
     public DataStoreRegistry dataStoreRegistry;
 
@@ -26,14 +22,6 @@ public class Framework {
         this.plugin = plugin;
         dataStoreRegistry = new DataStoreRegistry(this);
         commandRegistry = new CommandRegistry(this);
-    }
-
-    @Deprecated
-    public void addCommand(CommandTree command) {
-        injector.injectMembers(command);
-
-        commands.put(command.name, command);
-        command.onCommandCreate();
     }
 
     public void addListener(Listener listener) {
