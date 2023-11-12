@@ -3,6 +3,7 @@ package com.github.spark.lib;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreItem;
 import com.github.spark.lib.datastores.DataStoreReflection;
+import com.github.spark.lib.events.EventReflection;
 import com.github.spark.lib.events.PlayerCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,7 +47,8 @@ public abstract class SparkPlugin extends JavaPlugin {
 
         this.framework.loadCommands();
         onLoadInternalCommands();
-        this.registerListeners();
+
+        onRegisterListeners();
 
         this.onFrameworkEnable();
     }
@@ -65,5 +67,7 @@ public abstract class SparkPlugin extends JavaPlugin {
         dataStores.forEach(dataStore -> framework.addDataStore(dataStore));
     }
 
-    public void registerListeners() {}
+    private void onRegisterListeners() {
+        EventReflection.findAndRegisterEvents(framework);
+    }
 }
