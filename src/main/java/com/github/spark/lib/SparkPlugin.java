@@ -40,18 +40,6 @@ public abstract class SparkPlugin extends JavaPlugin {
 
         this.framework.handleStoresLoaded();
 
-        /////////// LOAD INTERNAL COMMANDS ///////////////////
-        framework.log(Level.INFO, "Registering framework commands...", true);
-        onLoadInternalCommands();
-        int internalCommandSize = framework.commands.size();
-        framework.log(Level.INFO, "Loaded " + internalCommandSize + " internal command(s)", true);
-
-        /////////// LOAD PLUGIN COMMANDS ///////////////////
-        framework.log(Level.INFO, "Registering plugin commands", true);
-        this.registerCommands();
-        int newPluginCommandSize = framework.commands.size() - internalCommandSize;
-        framework.log(Level.INFO, "Loaded " + newPluginCommandSize + " plugin command(s)", true);
-
         this.framework.loadCommands();
         this.registerListeners();
 

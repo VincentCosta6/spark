@@ -2,10 +2,8 @@ package com.github.spark.examples.commands.shop;
 
 import com.github.spark.examples.datastores.PlayerState;
 import com.github.spark.examples.datastores.PlayerStateDataStore;
-import com.github.spark.lib.Framework;
 import com.github.spark.lib.commands.Command;
 import com.github.spark.lib.commands.CommandHandler;
-import com.github.spark.lib.commands.CommandEventContext;
 import com.github.spark.lib.commands.dto.CommandContext;
 import com.google.inject.Inject;
 import org.bukkit.entity.Player;
