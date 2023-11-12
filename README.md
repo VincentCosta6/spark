@@ -21,11 +21,8 @@ The purpose of this framework is to simplify the development process of plugins.
 - [ ] Extensive and configurable permission system
   - [ ] Commands and command tree permissions
   - [ ] Events
-- [ ] External database integration
-- [ ] External cache store integration
 - [ ] Dependency Injection
   - [x] Datastores
   - [x] Framework
   - [ ] Permissions manager
-  - [ ] External Databases
-  - [ ] External Caches
+  - [ ] Custom Injections
