@@ -2,13 +2,10 @@ package com.github.spark.lib.events;
 
 import com.github.spark.lib.Framework;
 import com.github.spark.lib.SparkContext;
-import com.github.spark.lib.datastores.DataStore;
-import com.github.spark.lib.datastores.RegisterDataStore;
 import org.bukkit.event.Listener;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 public class EventReflection {
