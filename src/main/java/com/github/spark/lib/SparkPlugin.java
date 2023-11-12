@@ -42,7 +42,6 @@ public abstract class SparkPlugin extends JavaPlugin {
         /////////// LOAD PLUGIN STORES ///////////////////
         framework.log(Level.INFO, "Registering plugin datastores...", true);
         onLoadDataStores();
-
         this.framework.handleStoresLoaded();
 
         this.framework.loadCommands();

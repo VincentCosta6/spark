@@ -1,6 +1,5 @@
 package com.github.spark.examples;
 
-import com.github.spark.examples.events.PlayerMove;
 import com.github.spark.lib.SparkContext;
 import com.github.spark.lib.SparkPlugin;
 
