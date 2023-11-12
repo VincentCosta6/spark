@@ -6,7 +6,8 @@
 # spark
 spark, the framework that allows for rapid prototyping of Bukkit plugins.
 
-
+## Docs:
+Checkout the docs [here](https://github.com/VincentCosta6/spark/wiki)
 
 ### Features:
 The purpose of this framework is to simplify the development process of plugins. Many features will come out of the box that developers would otherwise need extensive boilerplate for.
