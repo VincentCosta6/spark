@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, Serializable {
+    @Serial
+    private static final long serialVersionUID = 42L;
+
     public transient Field cachedPrimaryKey;
 
     private HashMap<String, T> map = new HashMap<>();
