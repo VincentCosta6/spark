@@ -2,12 +2,9 @@ package com.github.spark.lib.services.registry;
 
 import com.github.spark.lib.common.Registry;
 import com.github.spark.lib.framework.Framework;
-import com.github.spark.lib.framework.FrameworkInjectable;
-import com.github.spark.lib.services.registry.ServiceReflection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.function.Supplier;
 
 public class ServiceRegistry extends Registry<Class<?>, Object> {
