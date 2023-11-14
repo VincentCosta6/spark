@@ -3,6 +3,7 @@ package com.github.spark.lib.services.custom;
 import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.services.annotations.Service;
 import com.google.inject.Inject;
+import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -71,5 +72,11 @@ public class MetadataService {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         return container.get(newKey, type);
+    }
+
+    public void displayName(ItemStack stack, Component displayName) {
+        ItemMeta meta = stack.getItemMeta();
+        meta.displayName(displayName);
+        stack.setItemMeta(meta);
     }
 }

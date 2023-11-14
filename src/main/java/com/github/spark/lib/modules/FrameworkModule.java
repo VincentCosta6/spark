@@ -35,6 +35,4 @@ public class FrameworkModule extends AbstractModule  {
             bind((Class<Object>) service.getClass()).toInstance(service);
         }
     }
-
-
 }
