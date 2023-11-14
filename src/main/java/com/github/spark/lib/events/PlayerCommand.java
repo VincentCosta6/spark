@@ -27,6 +27,10 @@ public class PlayerCommand implements Listener {
         CommandNode node = framework.commandRegistry.getCommand(rootCommand.toLowerCase());
         if (node != null) {
             String[] path = event.getMessage().split(" ");
+            String nextParam = null;
+            if (path.length > 1) {
+                nextParam = path[1];
+            }
 
             CommandContext newContext = new CommandContext(
                 null,
@@ -34,7 +38,8 @@ public class PlayerCommand implements Listener {
                     event,
                 new PlayerCommandEvent(event.getPlayer(), path, rootCommand),
                 new CommandNodeExecutionContext(rootCommand, Arrays.stream(path).skip(1).toArray(String[]::new)),
-                    path.length > 1
+                    nextParam != null,
+                    nextParam
             );
             node.execute(newContext);
             return;
