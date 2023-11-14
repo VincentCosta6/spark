@@ -7,6 +7,7 @@ import com.github.spark.lib.commands.CommandRegistry;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreRegistry;
 import com.github.spark.lib.events.EventRegistry;
+import com.github.spark.lib.injectable.CustomInjectable;
 import com.github.spark.lib.modules.FrameworkModule;
 import com.github.spark.lib.services.ServiceRegistry;
 import com.google.inject.Guice;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public class Framework {
@@ -60,6 +62,14 @@ public class Framework {
             var store = it.next();
             store.onSave(dataFolder);
         }
+    }
+
+    public void onRegisterCustomInjectables() {
+
+    }
+
+    public <T> void registerSingletonServiceFactory(Class<T> clazz, Supplier<T> singletonFactory) {
+        serviceRegistry.registerSingletonServiceFactory(clazz, singletonFactory);
     }
 
     public void injectMembers(Object object) {

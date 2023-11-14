@@ -13,8 +13,14 @@ public class CustomService {
     @Inject
     PlayerStateDataStore playerStore;
 
+    int test;
+
+    public CustomService(int test) {
+        this.test = test;
+    }
+
     public void printTestAndPlayerStateCount() {
-        framework.log("hello!");
+        framework.log("hello! " + this.test);
         framework.log("PlayerStates: " + playerStore.size());
     }
 }
