@@ -26,7 +26,7 @@ public class CommandReflection {
                     Object handlerInstance = handlerClass.getDeclaredConstructor().newInstance();
                     framework.injectMembers(handlerInstance);
                     CommandNode rootNode = new CommandNode(null,
-                            commandHandler.name(),
+                            commandHandler.name().toLowerCase(),
                             commandHandler.description(),
                             (Command) handlerInstance
                     );
@@ -50,7 +50,7 @@ public class CommandReflection {
                 Method commandMethod = parentInstance.getClass().getMethod(method.getName(), CommandContext.class);
                 commandMethod.setAccessible(true);
                 CommandNode commandNode = new CommandNode(parentNode,
-                        commandHandlerAnnotation.name(),
+                        commandHandlerAnnotation.name().toLowerCase(),
                         commandHandlerAnnotation.description(),
                         parentInstance,
                         commandMethod
@@ -72,7 +72,7 @@ public class CommandReflection {
                     framework.injectMembers(subCommandHandler);
                     CommandNode subCommandRoot = new CommandNode(
                             parentNode,
-                            subCommandAnnotation.name(),
+                            subCommandAnnotation.name().toLowerCase(),
                             subCommandAnnotation.description(),
                             (Command) subCommandHandler
                     );

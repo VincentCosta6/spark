@@ -45,7 +45,7 @@ public class CommandNode {
                 }
 
                 String nextPath = context.executionContext().restPaths()[0];
-                CommandNode subCommand = subCommands.get(nextPath);
+                CommandNode subCommand = subCommands.get(nextPath.toLowerCase());
                 if (subCommand != null) {
                     String nextParam = null;
                     if (context.executionContext().restPaths().length > 1) {
