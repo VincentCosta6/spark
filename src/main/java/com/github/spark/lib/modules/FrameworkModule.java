@@ -2,8 +2,8 @@ package com.github.spark.lib.modules;
 
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreItem;
-import com.github.spark.lib.datastores.DataStoreRegistry;
-import com.github.spark.lib.services.ServiceRegistry;
+import com.github.spark.lib.datastores.registry.DataStoreRegistry;
+import com.github.spark.lib.services.registry.ServiceRegistry;
 import com.google.inject.AbstractModule;
 import com.github.spark.lib.framework.Framework;
 

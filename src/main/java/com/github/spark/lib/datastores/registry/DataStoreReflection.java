@@ -1,6 +1,10 @@
-package com.github.spark.lib.datastores;
+package com.github.spark.lib.datastores.registry;
 
 import com.github.spark.lib.SparkContext;
+import com.github.spark.lib.datastores.DataStore;
+import com.github.spark.lib.datastores.DataStoreItem;
+import com.github.spark.lib.datastores.annotations.ItemKey;
+import com.github.spark.lib.datastores.annotations.RegisterDataStore;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 

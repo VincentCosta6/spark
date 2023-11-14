@@ -5,14 +5,10 @@ import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.services.custom.MetadataService;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public abstract class SparkPlugin extends JavaPlugin {
     public Framework framework;
-    private Set<Supplier<?>> customServices = new HashSet<>();
 
     /**
      * This is called after all commands and listeners have been registered
@@ -70,20 +66,20 @@ public abstract class SparkPlugin extends JavaPlugin {
     }
 
     private void onRegisterDataStores() {
-        framework.dataStoreRegistry.findAndRegisterDataStores();
+        framework.dataStoreRegistry.findAndRegisterItems();
     }
 
     private void onRegisterServices() {
         framework.registerSingletonServiceFactory(MetadataService.class, MetadataService::new);
-        framework.serviceRegistry.findAndRegisterServices();
+        framework.serviceRegistry.findAndRegisterItems();
     }
 
     private void onRegisterListeners() {
-        framework.eventRegistry.findAndRegisterEventHandlers(framework);
+        framework.eventRegistry.findAndRegisterItems();
     }
 
     private void onRegisterCommands() {
-        framework.commandRegistry.findAndRegisterCommands();
+        framework.commandRegistry.findAndRegisterItems();
     }
 
     private void onInjectAllMembers() {

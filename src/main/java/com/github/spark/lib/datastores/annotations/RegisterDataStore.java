@@ -1,4 +1,4 @@
-package com.github.spark.lib.services;
+package com.github.spark.lib.datastores.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Service {
+public @interface RegisterDataStore {
+    String name() default "";
+    int version() default 0;
 }

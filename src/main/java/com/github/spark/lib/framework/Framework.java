@@ -1,21 +1,16 @@
 package com.github.spark.lib.framework;
 
 import com.github.spark.lib.SparkPlugin;
-import com.github.spark.lib.commands.CommandNode;
-import com.github.spark.lib.commands.CommandReflection;
-import com.github.spark.lib.commands.CommandRegistry;
-import com.github.spark.lib.datastores.DataStore;
-import com.github.spark.lib.datastores.DataStoreRegistry;
-import com.github.spark.lib.events.EventRegistry;
-import com.github.spark.lib.injectable.CustomInjectable;
+import com.github.spark.lib.commands.registry.CommandRegistry;
+import com.github.spark.lib.datastores.registry.DataStoreRegistry;
+import com.github.spark.lib.events.registrry.EventRegistry;
 import com.github.spark.lib.modules.FrameworkModule;
-import com.github.spark.lib.services.ServiceRegistry;
+import com.github.spark.lib.services.registry.ServiceRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.bukkit.event.Listener;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
@@ -51,21 +46,12 @@ public class Framework {
             ));
     }
 
-    public <T extends DataStore<?>> void addDataStore(T store) {
-        dataStoreRegistry.addDataStore(store);
-        store.onLoad(plugin.getDataFolder());
-    }
-
     public void saveDataStores() {
         File dataFolder = plugin.getDataFolder();
         for (var it = dataStoreRegistry.getEntries(); it.hasNext(); ) {
             var store = it.next();
             store.onSave(dataFolder);
         }
-    }
-
-    public void onRegisterCustomInjectables() {
-
     }
 
     public <T> void registerSingletonServiceFactory(Class<T> clazz, Supplier<T> singletonFactory) {

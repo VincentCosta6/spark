@@ -1,6 +1,7 @@
-package com.github.spark.lib.events;
+package com.github.spark.lib.events.registrry;
 
 import com.github.spark.lib.SparkContext;
+import com.github.spark.lib.events.annotations.RegisterEvents;
 import org.bukkit.event.Listener;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
