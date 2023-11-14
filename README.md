@@ -18,6 +18,7 @@ The purpose of this framework is to simplify the development process of plugins.
   - [x] Commands
   - [x] Events
   - [x] Datastores
+  - [x] Services
 - [ ] Extensive and configurable permission system
   - [ ] Commands and command tree permissions
   - [ ] Events
@@ -25,4 +26,4 @@ The purpose of this framework is to simplify the development process of plugins.
   - [x] Datastores
   - [x] Framework
   - [ ] Permissions manager
-  - [ ] Custom Injections
+  - [x] Custom Injections
