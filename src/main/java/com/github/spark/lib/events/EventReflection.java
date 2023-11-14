@@ -1,15 +1,16 @@
 package com.github.spark.lib.events;
 
-import com.github.spark.lib.Framework;
 import com.github.spark.lib.SparkContext;
 import org.bukkit.event.Listener;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class EventReflection {
-    public static void findAndRegisterEvents(Framework framework) {
+    public static ArrayList<Listener> findEventHandlers() {
+        ArrayList<Listener> eventHandlers = new ArrayList<>();
         Reflections reflections = new Reflections(SparkContext.basePackage, Scanners.TypesAnnotated);
 
         Set<Class<?>> registerEventsClasses = reflections.getTypesAnnotatedWith(RegisterEvents.class);
@@ -17,11 +18,13 @@ public class EventReflection {
             if (registerEventsClass.getEnclosingClass() == null && Listener.class.isAssignableFrom(registerEventsClass)) {
                 try {
                     Listener listener = (Listener) registerEventsClass.getDeclaredConstructor().newInstance();
-                    framework.addListener(listener);
+                    eventHandlers.add(listener);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
+
+        return eventHandlers;
     }
 }

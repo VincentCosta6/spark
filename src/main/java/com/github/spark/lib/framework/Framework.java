@@ -1,11 +1,14 @@
-package com.github.spark.lib;
+package com.github.spark.lib.framework;
 
+import com.github.spark.lib.SparkPlugin;
 import com.github.spark.lib.commands.CommandNode;
 import com.github.spark.lib.commands.CommandReflection;
 import com.github.spark.lib.commands.CommandRegistry;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.DataStoreRegistry;
+import com.github.spark.lib.events.EventRegistry;
 import com.github.spark.lib.modules.FrameworkModule;
+import com.github.spark.lib.services.ServiceRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.bukkit.event.Listener;
@@ -17,29 +20,33 @@ import java.util.logging.Level;
 public class Framework {
     public CommandRegistry commandRegistry;
     public DataStoreRegistry dataStoreRegistry;
+    public ServiceRegistry serviceRegistry;
+    public EventRegistry eventRegistry;
 
     public final SparkPlugin plugin;
     private Injector injector;
 
     public Framework(SparkPlugin plugin) {
         this.plugin = plugin;
+        // these are injectable into other classes
         dataStoreRegistry = new DataStoreRegistry(this);
+        serviceRegistry = new ServiceRegistry(this);
+
+        // these are not
         commandRegistry = new CommandRegistry(this);
+        eventRegistry = new EventRegistry(this);
     }
 
     public void addListener(Listener listener) {
-        injector.injectMembers(listener);
-
         plugin.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
-    public void loadCommands() {
-        ArrayList<CommandNode> commands = CommandReflection.findCommandNodes(this);
-        commands.forEach(commandNode -> commandRegistry.addCommand(commandNode.getName(), commandNode));
-    }
-
-    public void handleStoresLoaded() {
-        injector = Guice.createInjector(new FrameworkModule(this, dataStoreRegistry));
+    public void createInjector() {
+        injector = Guice.createInjector(
+            new FrameworkModule(this,
+                    dataStoreRegistry,
+                    serviceRegistry
+            ));
     }
 
     public <T extends DataStore<?>> void addDataStore(T store) {

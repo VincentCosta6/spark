@@ -5,6 +5,7 @@ import com.github.spark.lib.datastores.DataStoreItem;
 import com.github.spark.lib.datastores.DataStoreReflection;
 import com.github.spark.lib.events.EventReflection;
 import com.github.spark.lib.events.PlayerCommand;
+import com.github.spark.lib.framework.Framework;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -39,15 +40,17 @@ public abstract class SparkPlugin extends JavaPlugin {
 
         this.framework = new Framework(this);
 
-        /////////// LOAD PLUGIN STORES ///////////////////
+        framework.log(Level.INFO, "Registering services...");
+        onRegisterServices();
         framework.log(Level.INFO, "Registering plugin datastores...", true);
-        onLoadDataStores();
-        this.framework.handleStoresLoaded();
+        onRegisterDataStores();
 
-        this.framework.loadCommands();
-        onLoadInternalCommands();
+        this.framework.createInjector();
 
         onRegisterListeners();
+        onInjectAllMembers();
+        onRegisterInternalCommands();
+        onRegisterCommands();
 
         this.onFrameworkEnable();
     }
@@ -57,16 +60,32 @@ public abstract class SparkPlugin extends JavaPlugin {
         framework.saveDataStores();
     }
 
-    private void onLoadInternalCommands() {
-        framework.addListener(new PlayerCommand());
+    private void onRegisterInternalCommands() {
+        PlayerCommand playerCommand = new PlayerCommand();
+        framework.injectMembers(playerCommand);
+        framework.addListener(playerCommand);
     }
 
-    private void onLoadDataStores() {
-        ArrayList<DataStore<? extends DataStoreItem>> dataStores = DataStoreReflection.findDataStores();
-        dataStores.forEach(dataStore -> framework.addDataStore(dataStore));
+    private void onRegisterDataStores() {
+        framework.dataStoreRegistry.findAndRegisterDataStores();
+    }
+
+    private void onRegisterServices() {
+        framework.serviceRegistry.findAndRegisterServices();
     }
 
     private void onRegisterListeners() {
-        EventReflection.findAndRegisterEvents(framework);
+        framework.eventRegistry.findAndRegisterEventHandlers(framework);
+    }
+
+    private void onRegisterCommands() {
+        framework.commandRegistry.findAndRegisterCommands();
+    }
+
+    private void onInjectAllMembers() {
+        framework.dataStoreRegistry.injectMembers();
+        framework.serviceRegistry.injectMembers();
+        framework.commandRegistry.injectMembers();
+        framework.eventRegistry.injectMembers();
     }
 }

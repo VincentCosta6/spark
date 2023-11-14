@@ -1,7 +1,9 @@
 package com.github.spark.examples.datastores;
 
+import com.github.spark.examples.services.CustomService;
 import com.github.spark.lib.datastores.DataStore;
 import com.github.spark.lib.datastores.RegisterDataStore;
+import com.google.inject.Inject;
 import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;

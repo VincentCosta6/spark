@@ -5,7 +5,7 @@ import com.github.spark.lib.commands.CommandNode;
 import com.github.spark.lib.commands.dto.CommandNodeExecutionContext;
 import com.github.spark.lib.commands.dto.PlayerCommandEvent;
 import com.google.inject.Inject;
-import com.github.spark.lib.Framework;
+import com.github.spark.lib.framework.Framework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

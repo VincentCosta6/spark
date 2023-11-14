@@ -1,6 +1,6 @@
 package com.github.spark.lib.commands;
 
-import com.github.spark.lib.Framework;
+import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.SparkContext;
 import com.github.spark.lib.commands.dto.CommandContext;
 import org.reflections.Reflections;
@@ -30,7 +30,7 @@ public class CommandReflection {
                             commandHandler.description(),
                             (Command) handlerInstance
                     );
-                    registerSubCommands(rootNode, handlerClass, (Command) handlerInstance);
+                    registerSubCommands(framework, rootNode, handlerClass, (Command) handlerInstance);
                     commands.add(rootNode);
 //                    commands.put(handlerClass.getAnnotation(CommandHandler.class).name(), rootNode);
                 } catch (Exception e) {
@@ -42,7 +42,7 @@ public class CommandReflection {
         return commands;
     }
 
-    public static void registerSubCommands(CommandNode parentNode, Class<?> parentDef, Command parentInstance) throws NoSuchMethodException {
+    public static void registerSubCommands(Framework framework, CommandNode parentNode, Class<?> parentDef, Command parentInstance) throws NoSuchMethodException {
         for (Method method : parentDef.getDeclaredMethods()) {
             method.setAccessible(true);
             CommandHandler commandHandlerAnnotation = method.getAnnotation(CommandHandler.class);
@@ -69,6 +69,7 @@ public class CommandReflection {
                         subCommandHandler = field.getType().getDeclaredConstructor().newInstance();
                         field.set(parentInstance, subCommandHandler);
                     }
+                    framework.injectMembers(subCommandHandler);
                     CommandNode subCommandRoot = new CommandNode(
                             parentNode,
                             subCommandAnnotation.name(),
@@ -76,7 +77,7 @@ public class CommandReflection {
                             (Command) subCommandHandler
                     );
                     parentNode.addSubCommand(subCommandRoot);
-                    registerSubCommands(subCommandRoot, field.getType(), (Command) subCommandHandler);
+                    registerSubCommands(framework, subCommandRoot, field.getType(), (Command) subCommandHandler);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
