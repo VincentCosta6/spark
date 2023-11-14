@@ -2,16 +2,13 @@ package com.github.spark.lib;
 
 import com.github.spark.lib.events.PlayerCommand;
 import com.github.spark.lib.framework.Framework;
+import com.github.spark.lib.services.custom.MetaDataService;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public abstract class SparkPlugin extends JavaPlugin {
     public Framework framework;
-    private Set<Supplier<?>> customServices = new HashSet<>();
 
     /**
      * This is called after all commands and listeners have been registered
@@ -73,6 +70,7 @@ public abstract class SparkPlugin extends JavaPlugin {
     }
 
     private void onRegisterServices() {
+        framework.serviceRegistry.registerSingletonServiceFactory(MetaDataService.class, MetaDataService::new);
         framework.serviceRegistry.findAndRegisterServices();
     }
 

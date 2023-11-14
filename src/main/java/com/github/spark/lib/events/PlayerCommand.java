@@ -20,6 +20,7 @@ public class PlayerCommand implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
+        event.setMessage(null);
 
         int index = event.getMessage().indexOf(' ');
         String rootCommand = event.getMessage().substring(1, index != -1 ? index : event.getMessage().length());
@@ -34,7 +35,6 @@ public class PlayerCommand implements Listener {
                 new CommandNodeExecutionContext(rootCommand, Arrays.stream(path).skip(1).toArray(String[]::new))
             );
             node.execute(newContext);
-            return;
         }
     }
 }

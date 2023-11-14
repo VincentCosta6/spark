@@ -7,11 +7,8 @@ import com.google.inject.Inject;
 
 @Service
 public class CustomService {
-    @Inject
-    Framework framework;
-
-    @Inject
-    PlayerStateDataStore playerStore;
+    @Inject Framework framework;
+    @Inject PlayerStateDataStore playerStore;
 
     int test;
 
