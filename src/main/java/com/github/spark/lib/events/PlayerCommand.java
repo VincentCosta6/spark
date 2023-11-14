@@ -30,8 +30,11 @@ public class PlayerCommand implements Listener {
 
             CommandContext newContext = new CommandContext(
                 null,
+                    player,
+                    event,
                 new PlayerCommandEvent(event.getPlayer(), path, rootCommand),
-                new CommandNodeExecutionContext(rootCommand, Arrays.stream(path).skip(1).toArray(String[]::new))
+                new CommandNodeExecutionContext(rootCommand, Arrays.stream(path).skip(1).toArray(String[]::new)),
+                    path.length > 1
             );
             node.execute(newContext);
             return;

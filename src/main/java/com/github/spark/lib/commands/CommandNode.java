@@ -49,11 +49,14 @@ public class CommandNode {
                 if (subCommand != null) {
                     CommandContext newCommandContext = new CommandContext(
                         context,
+                            context.player(),
+                            context.event(),
                             context.playerCommandEvent(),
                             new CommandNodeExecutionContext(
                                 nextPath,
                                 Arrays.stream(context.executionContext().restPaths()).skip(1).toArray(String[]::new)
-                            )
+                            ),
+                            context.executionContext().restPaths().length > 1
                     );
                     return subCommand.execute(newCommandContext);
                 }
