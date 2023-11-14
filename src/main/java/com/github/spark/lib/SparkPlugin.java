@@ -47,9 +47,9 @@ public abstract class SparkPlugin extends JavaPlugin {
         this.framework.createInjector();
 
         onRegisterListeners();
-        onInjectAllMembers();
         onRegisterInternalCommands();
         onRegisterCommands();
+        onInjectAllMembers();
 
         this.onFrameworkEnable();
     }
@@ -70,7 +70,7 @@ public abstract class SparkPlugin extends JavaPlugin {
     }
 
     private void onRegisterServices() {
-        framework.registerSingletonServiceFactory(MetadataService.class, MetadataService::new);
+        framework.serviceRegistry.addItem(MetadataService.class, new MetadataService());
         framework.serviceRegistry.findAndRegisterItems();
     }
 
