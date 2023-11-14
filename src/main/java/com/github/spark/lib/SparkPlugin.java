@@ -2,6 +2,7 @@ package com.github.spark.lib;
 
 import com.github.spark.lib.events.PlayerCommand;
 import com.github.spark.lib.framework.Framework;
+import com.github.spark.lib.services.custom.MetadataService;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
@@ -73,6 +74,7 @@ public abstract class SparkPlugin extends JavaPlugin {
     }
 
     private void onRegisterServices() {
+        framework.registerSingletonServiceFactory(MetadataService.class, MetadataService::new);
         framework.serviceRegistry.findAndRegisterServices();
     }
 
