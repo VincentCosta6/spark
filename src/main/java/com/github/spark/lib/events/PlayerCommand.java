@@ -24,7 +24,7 @@ public class PlayerCommand implements Listener {
         int index = event.getMessage().indexOf(' ');
         String rootCommand = event.getMessage().substring(1, index != -1 ? index : event.getMessage().length());
 
-        CommandNode node = framework.commandRegistry.getCommand(rootCommand);
+        CommandNode node = framework.commandRegistry.getCommand(rootCommand.toLowerCase());
         if (node != null) {
             String[] path = event.getMessage().split(" ");
 
