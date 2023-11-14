@@ -47,6 +47,10 @@ public class CommandNode {
                 String nextPath = context.executionContext().restPaths()[0];
                 CommandNode subCommand = subCommands.get(nextPath);
                 if (subCommand != null) {
+                    String nextParam = null;
+                    if (context.executionContext().restPaths().length > 1) {
+                        nextParam = context.executionContext().restPaths()[1];
+                    }
                     CommandContext newCommandContext = new CommandContext(
                         context,
                             context.player(),
@@ -56,7 +60,8 @@ public class CommandNode {
                                 nextPath,
                                 Arrays.stream(context.executionContext().restPaths()).skip(1).toArray(String[]::new)
                             ),
-                            context.executionContext().restPaths().length > 1
+                            nextParam != null,
+                            nextParam
                     );
                     return subCommand.execute(newCommandContext);
                 }
