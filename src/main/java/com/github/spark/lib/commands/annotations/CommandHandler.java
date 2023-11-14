@@ -1,4 +1,4 @@
-package com.github.spark.lib.commands;
+package com.github.spark.lib.commands.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -2,7 +2,7 @@ package com.github.spark.examples.commands.shop;
 
 import com.github.spark.examples.services.CustomService;
 import com.github.spark.lib.commands.Command;
-import com.github.spark.lib.commands.CommandHandler;
+import com.github.spark.lib.commands.annotations.CommandHandler;
 import com.github.spark.lib.commands.dto.CommandContext;
 import com.google.inject.Inject;
 

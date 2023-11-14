@@ -1,6 +1,7 @@
-package com.github.spark.lib.services;
+package com.github.spark.lib.services.registry;
 
 import com.github.spark.lib.SparkContext;
+import com.github.spark.lib.services.annotations.Service;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 

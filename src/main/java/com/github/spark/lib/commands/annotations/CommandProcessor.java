@@ -1,4 +1,6 @@
-package com.github.spark.lib.commands;
+package com.github.spark.lib.commands.annotations;
+
+import com.github.spark.lib.commands.annotations.CommandHandler;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

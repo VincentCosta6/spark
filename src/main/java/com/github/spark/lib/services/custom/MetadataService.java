@@ -1,7 +1,7 @@
 package com.github.spark.lib.services.custom;
 
 import com.github.spark.lib.framework.Framework;
-import com.github.spark.lib.services.Service;
+import com.github.spark.lib.services.annotations.Service;
 import com.google.inject.Inject;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

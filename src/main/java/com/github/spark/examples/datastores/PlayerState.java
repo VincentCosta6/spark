@@ -1,7 +1,7 @@
 package com.github.spark.examples.datastores;
 
 import com.github.spark.lib.datastores.DataStoreItem;
-import com.github.spark.lib.datastores.ItemKey;
+import com.github.spark.lib.datastores.annotations.ItemKey;
 import org.bukkit.entity.Player;
 
 public class PlayerState extends DataStoreItem {

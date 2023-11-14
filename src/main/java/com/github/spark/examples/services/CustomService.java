@@ -2,7 +2,7 @@ package com.github.spark.examples.services;
 
 import com.github.spark.examples.datastores.PlayerStateDataStore;
 import com.github.spark.lib.framework.Framework;
-import com.github.spark.lib.services.Service;
+import com.github.spark.lib.services.annotations.Service;
 import com.google.inject.Inject;
 
 @Service
