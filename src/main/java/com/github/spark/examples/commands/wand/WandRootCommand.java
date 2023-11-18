@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.UUID;
+
 @CommandHandler(root = true, name = "wand")
 public class WandRootCommand implements Command {
     @Inject
@@ -33,6 +35,7 @@ public class WandRootCommand implements Command {
                 .color(TextColor.color(175, 25, 225))
         );
         metaService.setMeta(stick, Constants.MAGIC_WAND_KEY, true);
+        metaService.setMeta(stick, "uuid", UUID.randomUUID().toString());
 
         player.getInventory().addItem(stick);
         return true;
