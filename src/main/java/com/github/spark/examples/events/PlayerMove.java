@@ -27,8 +27,9 @@ public class PlayerMove implements Listener {
         Player player = event.getPlayer();
         PlayerState playerState = playerStateDataStore.getOrDefaultCreate(player);
 
-        framework.log(playerState.toString());
-        playerState.magicka -= 1;
+        playerState.mutate(() -> {
+           playerState.magicka -= 1;
+        });
         customService.printTestAndPlayerStateCount();
 
         framework.log(event.getItem().toString());

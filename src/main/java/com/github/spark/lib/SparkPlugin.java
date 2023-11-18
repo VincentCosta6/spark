@@ -3,6 +3,7 @@ package com.github.spark.lib;
 import com.github.spark.lib.events.PlayerCommand;
 import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.services.custom.MetadataService;
+import com.github.spark.lib.services.custom.ObserverService;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -51,6 +52,9 @@ public abstract class SparkPlugin extends JavaPlugin {
         onRegisterCommands();
         onInjectAllMembers();
 
+        // observable callbacks do not need to be injected
+        onRegisterObservableCallbacks();
+
         this.onFrameworkEnable();
     }
 
@@ -71,6 +75,7 @@ public abstract class SparkPlugin extends JavaPlugin {
 
     private void onRegisterServices() {
         framework.serviceRegistry.addItem(MetadataService.class, new MetadataService());
+        framework.serviceRegistry.addItem(ObserverService.class, new ObserverService());
         framework.serviceRegistry.findAndRegisterItems();
     }
 
@@ -80,6 +85,10 @@ public abstract class SparkPlugin extends JavaPlugin {
 
     private void onRegisterCommands() {
         framework.commandRegistry.findAndRegisterItems();
+    }
+
+    private void onRegisterObservableCallbacks() {
+        framework.observableRegistry.findAndRegisterItems();
     }
 
     private void onInjectAllMembers() {
