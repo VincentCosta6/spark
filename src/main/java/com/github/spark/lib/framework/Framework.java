@@ -5,6 +5,7 @@ import com.github.spark.lib.commands.registry.CommandRegistry;
 import com.github.spark.lib.datastores.registry.DataStoreRegistry;
 import com.github.spark.lib.events.registrry.EventRegistry;
 import com.github.spark.lib.modules.FrameworkModule;
+import com.github.spark.lib.observables.registry.ObservableRegistry;
 import com.github.spark.lib.services.registry.ServiceRegistry;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -19,6 +20,7 @@ public class Framework {
     public DataStoreRegistry dataStoreRegistry;
     public ServiceRegistry serviceRegistry;
     public EventRegistry eventRegistry;
+    public ObservableRegistry observableRegistry;
 
     public final SparkPlugin plugin;
     private Injector injector;
@@ -32,6 +34,7 @@ public class Framework {
         // these are not
         commandRegistry = new CommandRegistry(this);
         eventRegistry = new EventRegistry(this);
+        observableRegistry = new ObservableRegistry(this);
     }
 
     public void addListener(Listener listener) {

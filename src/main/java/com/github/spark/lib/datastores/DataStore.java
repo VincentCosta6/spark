@@ -1,5 +1,8 @@
 package com.github.spark.lib.datastores;
 
+import com.github.spark.lib.services.custom.ObserverService;
+import com.google.inject.Inject;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -8,6 +11,8 @@ import java.util.function.Supplier;
 public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, Serializable {
     @Serial
     private static final long serialVersionUID = 42L;
+
+    @Inject private transient ObserverService observerService;
 
     public transient Field cachedPrimaryKey;
 
@@ -79,6 +84,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     public void onDateStoreCleared() {}
     public void onItemCreated(T newItem) {}
     public void onItemRemoved(T oldItem) {}
+    public void onItemMutated(T item) {}
 
     public Iterator<T> getIterator() {
         return map.values().iterator();
@@ -145,6 +151,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
 
                 for(T item : dataStoreInFile.map.values()) {
                     map.put((String) cachedPrimaryKey.get(item), item);
+                    item.setDatastore(this);
                 }
                 setName(dataStoreInFile.getName());
                 setVersion(dataStoreInFile.getVersion());
@@ -172,6 +179,11 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public void notifyObserversOfMutation(DataStoreItem item) {
+        observerService.notifyObserverOfMutation(item.getClass(), item);
+        onItemMutated((T) item);
     }
 }
 
