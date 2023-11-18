@@ -76,9 +76,12 @@ public abstract class SparkPlugin extends JavaPlugin {
         }
     }
 
+    public void onPluginDisable() { }
+
     @Override
-    public void onDisable() {
+    public final void onDisable() {
         framework.saveDataStores();
+        onPluginDisable();
     }
 
     private void onRegisterInternalCommands() {
