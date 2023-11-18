@@ -8,12 +8,15 @@ import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.events.annotations.RegisterEvents;
 import com.github.spark.lib.services.custom.MetadataService;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Location;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.google.inject.Inject;
+import org.bukkit.util.Vector;
 
 @RegisterEvents
 public class PlayerMove implements Listener {
@@ -24,18 +27,29 @@ public class PlayerMove implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerInteractEvent event) {
+        if (!event.hasItem()) {
+            return;
+        }
+
         Player player = event.getPlayer();
-        PlayerState playerState = playerStateDataStore.getOrDefaultCreate(player);
-
-        playerState.mutate(() -> {
-           playerState.magicka -= 1;
-        });
-        customService.printTestAndPlayerStateCount();
-
-        framework.log(event.getItem().toString());
 
         if (metaService.getMetaBoolean(event.getItem(), Constants.MAGIC_WAND_KEY) == Boolean.TRUE) {
-            player.sendMessage(Component.text("You used a magic wand!"));
+            PlayerState playerState = playerStateDataStore.getOrDefaultCreate(player);
+
+            playerState.mutate(() -> {
+                playerState.magicka -= 1;
+            });
+            int distanceToSpawn = 2;
+            double fireballVelocity = 0.8;
+
+            Location eyeLocation = player.getEyeLocation();
+            Vector direction = eyeLocation.getDirection();
+
+            Location fireballSpawnPoint = eyeLocation.add(direction.clone().multiply(distanceToSpawn));
+            Fireball fireball = player.getWorld().spawn(fireballSpawnPoint, Fireball.class);
+            fireball.setDirection(direction);
+            fireball.setYield(100);
+            fireball.setVelocity(direction.normalize().multiply(fireballVelocity));
         }
     }
 }
