@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github'
-version = '0.10.3-SNAPSHOT'
+version = '0.10.4-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -64,6 +64,14 @@ processResources {
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            exclude '**/com/github/spark/examples/**'
+        }
     }
 }
 
