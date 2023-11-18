@@ -59,7 +59,7 @@ public abstract class SparkPlugin extends JavaPlugin {
         this.onFrameworkEnable();
 
         if (SparkContext.saveIntervalSeconds != null && SparkContext.saveIntervalSeconds > 0) {
-            framework.log(Level.INFO, "Found saveIntervalSeconds setting, creating save interval", true);
+            framework.log(Level.INFO, "Found saveIntervalSeconds setting, creating save interval for every " + SparkContext.saveIntervalSeconds + " second(s)", true);
 
             new BukkitRunnable(){
                 long lastRun = 0;
@@ -68,7 +68,7 @@ public abstract class SparkPlugin extends JavaPlugin {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastRun > SparkContext.saveIntervalSeconds * 1000) {
                         lastRun = currentTime;
-                        framework.log("saving datastores...");
+                        framework.log(Level.INFO, "Interval: Saving datastores...", true);
                         framework.saveDataStores();
                     }
                 }
