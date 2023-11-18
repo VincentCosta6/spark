@@ -1,6 +1,7 @@
 package com.github.spark.lib.services.custom;
 
 import com.github.spark.lib.framework.Framework;
+import com.github.spark.lib.services.annotations.ModifyMetaCallback;
 import com.github.spark.lib.services.annotations.Service;
 import com.google.inject.Inject;
 import net.kyori.adventure.text.Component;
@@ -75,8 +76,20 @@ public class MetadataService {
     }
 
     public void displayName(ItemStack stack, Component displayName) {
+        modifyItemMeta(stack, meta -> {
+            meta.displayName(displayName);
+        });
+    }
+
+    public void setCustomModelData(ItemStack stack, Integer modelData) {
+        modifyItemMeta(stack, meta -> {
+            meta.setCustomModelData(modelData);
+        });
+    }
+
+    public void modifyItemMeta(ItemStack stack, ModifyMetaCallback callback) {
         ItemMeta meta = stack.getItemMeta();
-        meta.displayName(displayName);
+        callback.call(meta);
         stack.setItemMeta(meta);
     }
 }
