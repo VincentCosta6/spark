@@ -8,6 +8,7 @@ public final class PluginEntry extends SparkPlugin {
     @Override
     public void onBeforeFrameworkInitialize() {
         SparkContext.setBasePackage("com.github.spark.examples");
+        SparkContext.setSaveInterval(5);
     }
 
     public void onBeforeFrameworkRegistrations() {

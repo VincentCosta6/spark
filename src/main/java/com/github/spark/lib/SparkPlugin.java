@@ -5,6 +5,7 @@ import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.services.custom.MetadataService;
 import com.github.spark.lib.services.custom.ObserverService;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.logging.Level;
 
@@ -56,6 +57,23 @@ public abstract class SparkPlugin extends JavaPlugin {
         onRegisterObservableCallbacks();
 
         this.onFrameworkEnable();
+
+        if (SparkContext.saveIntervalSeconds != null && SparkContext.saveIntervalSeconds > 0) {
+            framework.log(Level.INFO, "Found saveIntervalSeconds setting, creating save interval", true);
+
+            new BukkitRunnable(){
+                long lastRun = 0;
+                @Override
+                public void run(){
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - lastRun > SparkContext.saveIntervalSeconds * 1000) {
+                        lastRun = currentTime;
+                        framework.log("saving datastores...");
+                        framework.saveDataStores();
+                    }
+                }
+            }.runTaskTimer(framework.plugin, 0L, 20L);
+        }
     }
 
     @Override
