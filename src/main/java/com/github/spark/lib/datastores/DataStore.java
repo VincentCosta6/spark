@@ -31,6 +31,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         T instance = findById(id);
         if (instance == null) {
             instance = defaultCreator.get();
+            instance.setDatastore(this);
             insert(instance);
         }
         return instance;
