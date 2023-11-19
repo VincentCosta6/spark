@@ -28,7 +28,16 @@ public final class ObservableReflection {
             if (serviceAnnotation != null) {
                 Object serviceInstance = framework.serviceRegistry.getItem(methodClass);
                 callbackMethod.setAccessible(true);
-                callbacksToRegister.add(new MutationEventObserver(observeMutationAnnotation.type(), serviceInstance, callbackMethod));
+
+                Class<?> parameterClass = null;
+                Class<?>[] parameterTypes = callbackMethod.getParameterTypes();
+                if (parameterTypes.length > 0) {
+                    parameterClass = parameterTypes[0];
+                } else {
+                    new RuntimeException("@ObserveMutation for method: " + callbackMethod.getName() + " does not have the correct parameters");
+                }
+
+                callbacksToRegister.add(new MutationEventObserver(parameterClass, serviceInstance, callbackMethod));
             } else {
                 framework.log(Level.SEVERE, "Cannot register @ObserveMutation in " + methodClass.getSimpleName() + " since it is not a service");
             }
