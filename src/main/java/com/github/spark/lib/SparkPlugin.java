@@ -68,8 +68,7 @@ public abstract class SparkPlugin extends JavaPlugin {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastRun > SparkContext.saveIntervalSeconds * 1000) {
                         lastRun = currentTime;
-                        framework.log(Level.INFO, "Interval: Saving datastores...", true);
-                        framework.saveDataStores();
+                        framework.saveDataStores(true);
                     }
                 }
             }.runTaskTimer(framework.plugin, 0L, 20L);

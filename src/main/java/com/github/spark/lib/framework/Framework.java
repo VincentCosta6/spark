@@ -50,10 +50,16 @@ public class Framework {
     }
 
     public void saveDataStores() {
+        saveDataStores(false);
+    }
+
+    public void saveDataStores(boolean autoSave) {
         File dataFolder = plugin.getDataFolder();
         for (var it = dataStoreRegistry.getEntries(); it.hasNext(); ) {
             var store = it.next();
-            store.onSave(dataFolder);
+            if (!autoSave || store.isDirty()) {
+                store.onSave(dataFolder);
+            }
         }
     }
 

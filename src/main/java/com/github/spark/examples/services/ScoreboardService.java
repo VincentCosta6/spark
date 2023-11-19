@@ -27,7 +27,7 @@ public class ScoreboardService {
         o.setDisplaySlot(DisplaySlot.SIDEBAR);
         o.setDisplayName(ChatColor.DARK_AQUA + "Navarta");
 
-        Score mana = o.getScore(ChatColor.WHITE + "Mana: " + ChatColor.GOLD + playerState.magicka);
+        Score mana = o.getScore(ChatColor.WHITE + "Mana: " + ChatColor.LIGHT_PURPLE + playerState.magicka);
         mana.setScore(3);
 
         player.setScoreboard(board);
@@ -37,6 +37,5 @@ public class ScoreboardService {
     private void onMutation(PlayerState state) {
         Player player = Bukkit.getPlayer(UUID.fromString(state.playerId));
         updateScoreboard(player);
-        framework.log("1: " + state.toString());
     }
 }

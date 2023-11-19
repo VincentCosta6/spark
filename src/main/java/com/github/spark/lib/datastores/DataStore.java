@@ -15,6 +15,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     @Inject private transient ObserverService observerService;
 
     public transient Field cachedPrimaryKey;
+    private transient boolean isDirty = false;
 
     private HashMap<String, T> map = new HashMap<>();
     private String name = this.getClass().getSimpleName();
@@ -116,6 +117,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
 
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileToWrite))) {
                 oos.writeObject(this);
+                isDirty = false;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -182,8 +184,13 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     }
 
     public void notifyObserversOfMutation(DataStoreItem item) {
+        isDirty = true;
         observerService.notifyObserverOfMutation(item.getClass(), item);
         onItemMutated((T) item);
+    }
+
+    public boolean isDirty() {
+        return isDirty;
     }
 }
 
