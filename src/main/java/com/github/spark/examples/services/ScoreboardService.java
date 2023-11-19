@@ -33,7 +33,7 @@ public class ScoreboardService {
         player.setScoreboard(board);
     }
 
-    @ObserveMutation(type=PlayerState.class)
+    @ObserveMutation
     private void onMutation(PlayerState state) {
         Player player = Bukkit.getPlayer(UUID.fromString(state.playerId));
         updateScoreboard(player);
