@@ -37,5 +37,16 @@ public class ScoreboardService {
     private void onMutation(PlayerState state) {
         Player player = Bukkit.getPlayer(UUID.fromString(state.playerId));
         updateScoreboard(player);
+        System.out.println("old method");
+        System.out.println(state.toString());
+    }
+
+    @ObserveMutation
+    private void onMutation(PlayerState state, PlayerState oldState) {
+        Player player = Bukkit.getPlayer(UUID.fromString(state.playerId));
+        updateScoreboard(player);
+        System.out.println("new method");
+        System.out.println(state.toString());
+        System.out.println(oldState.toString());
     }
 }

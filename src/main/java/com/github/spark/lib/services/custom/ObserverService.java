@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 public class ObserverService {
     @Inject Framework framework;
 
-    public <T> void notifyObserverOfMutation(Class<?> clazz, T item) {
-        framework.observableRegistry.notifyObservers(clazz, item);
+    public <T> void notifyObserverOfMutation(Class<?> clazz, T item, T oldState) {
+        framework.observableRegistry.notifyObservers(clazz, item, oldState);
     }
 }

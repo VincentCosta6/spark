@@ -104,6 +104,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     public void onItemCreated(T newItem) {}
     public void onItemRemoved(T oldItem) {}
     public void onItemMutated(T item) {}
+    public void onItemMutated(T item, T oldState) {}
 
     @JsonIgnore
     public Iterator<T> getIterator() {
@@ -211,9 +212,10 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         this.version = version;
     }
 
-    public void notifyObserversOfMutation(DataStoreItem item) {
+    public void notifyObserversOfMutation(DataStoreItem item, DataStoreItem oldState) {
         isDirty = true;
-        observerService.notifyObserverOfMutation(item.getClass(), item);
+        observerService.notifyObserverOfMutation(item.getClass(), item, oldState);
+        onItemMutated((T) item, (T) oldState);
         onItemMutated((T) item);
     }
 
