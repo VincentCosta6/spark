@@ -1,5 +1,6 @@
 package com.github.spark.lib;
 
+import com.github.spark.lib.common.SparkContext;
 import com.github.spark.lib.events.PlayerCommand;
 import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.services.custom.MetadataService;
@@ -94,8 +95,8 @@ public abstract class SparkPlugin extends JavaPlugin {
     }
 
     private void onRegisterServices() {
-        framework.serviceRegistry.addItem(MetadataService.class, new MetadataService());
-        framework.serviceRegistry.addItem(ObserverService.class, new ObserverService());
+        framework.serviceRegistry.add(MetadataService.class, new MetadataService());
+        framework.serviceRegistry.add(ObserverService.class, new ObserverService());
         framework.serviceRegistry.findAndRegisterItems();
     }
 

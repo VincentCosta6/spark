@@ -4,7 +4,7 @@ import com.github.spark.lib.commands.Command;
 import com.github.spark.lib.commands.CommandNode;
 import com.github.spark.lib.commands.annotations.CommandHandler;
 import com.github.spark.lib.framework.Framework;
-import com.github.spark.lib.SparkContext;
+import com.github.spark.lib.common.SparkContext;
 import com.github.spark.lib.commands.dto.CommandContext;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;

@@ -1,7 +1,8 @@
 package com.github.spark.examples;
 
 import com.github.spark.examples.services.CustomService;
-import com.github.spark.lib.SparkContext;
+import com.github.spark.examples.services.RunnableService;
+import com.github.spark.lib.common.SparkContext;
 import com.github.spark.lib.SparkPlugin;
 
 public final class PluginEntry extends SparkPlugin {
@@ -17,6 +18,8 @@ public final class PluginEntry extends SparkPlugin {
 
     @Override
     public void onFrameworkEnable() {
-        this.framework.log("Started");
+        RunnableService service = (RunnableService) framework.serviceRegistry.get(RunnableService.class);
+
+        service.createRunnable();
     }
 }
