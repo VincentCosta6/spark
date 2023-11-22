@@ -1,5 +1,6 @@
 package com.github.spark.lib.datastores;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.spark.lib.datastores.events.MutateCallback;
 import com.github.spark.lib.util.JacksonUtils;
 import org.jetbrains.annotations.Contract;
@@ -12,6 +13,7 @@ public abstract class DataStoreItem implements Serializable {
     @Serial
     private static final long serialVersionUID = 42L;
 
+    @JsonIgnore
     private transient DataStore<? extends DataStoreItem> datastore;
 
     @Contract(pure=true)

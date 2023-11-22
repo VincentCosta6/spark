@@ -13,7 +13,7 @@ public class RunnableService {
         new BukkitRunnable(){
             @Override
             public void run(){
-                framework.log("Runnable log");
+//                framework.log("Runnable log");
             }
         }.runTaskTimer(framework.plugin, 0L, 20L);
     }
