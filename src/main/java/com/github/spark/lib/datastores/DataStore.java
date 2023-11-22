@@ -96,7 +96,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     public void onDateStoreCleared() {}
     public void onItemCreated(T newItem) {}
     public void onItemRemoved(T oldItem) {}
-    public void onItemMutated(T item) {}
+    public void onItemMutated(T item, T oldState) {}
 
     public Iterator<T> getIterator() {
         return map.values().iterator();
@@ -194,10 +194,10 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         this.version = version;
     }
 
-    public void notifyObserversOfMutation(DataStoreItem item) {
+    public void notifyObserversOfMutation(DataStoreItem item, DataStoreItem oldState) {
         isDirty = true;
-        observerService.notifyObserverOfMutation(item.getClass(), item);
-        onItemMutated((T) item);
+        observerService.notifyObserverOfMutation(item.getClass(), item, oldState);
+        onItemMutated((T) item, (T) oldState);
     }
 
     public boolean isDirty() {

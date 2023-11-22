@@ -38,4 +38,10 @@ public class ScoreboardService {
         Player player = Bukkit.getPlayer(UUID.fromString(state.playerId));
         updateScoreboard(player);
     }
+
+    @ObserveMutation
+    private void onMutation(PlayerState state, PlayerState oldState) {
+        Player player = Bukkit.getPlayer(UUID.fromString(state.playerId));
+        updateScoreboard(player);
+    }
 }

@@ -28,7 +28,7 @@ public class ObservableRegistry extends Registry<Class<?>, ArrayList<MutationEve
         }
     }
 
-    public <T> void notifyObservers(Class<?> clazz, T item) {
+    public <T> void notifyObservers(Class<?> clazz, T item, T oldState) {
         ArrayList<MutationEventObserver> observers = items.get(clazz);
 
         if (observers == null || observers.size() == 0) {
@@ -37,7 +37,7 @@ public class ObservableRegistry extends Registry<Class<?>, ArrayList<MutationEve
 
         observers.forEach(observer -> {
             try {
-                observer.method().invoke(observer.instance(), item);
+                observer.method().invoke(observer.instance(), item, oldState);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             } catch (InvocationTargetException e) {

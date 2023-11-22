@@ -1,6 +1,9 @@
 package com.github.spark.lib.datastores;
 
 import com.github.spark.lib.datastores.events.MutateCallback;
+import com.github.spark.lib.util.JacksonUtils;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,7 +14,8 @@ public abstract class DataStoreItem implements Serializable {
 
     private transient DataStore<? extends DataStoreItem> datastore;
 
-    public static DataStoreItem createDefault() {
+    @Contract(pure=true)
+    public static @Nullable DataStoreItem createDefault() {
         return null;
     }
 
@@ -20,8 +24,9 @@ public abstract class DataStoreItem implements Serializable {
     }
 
     public DataStoreItem mutate(MutateCallback callback) {
+        DataStoreItem clonedItem = JacksonUtils.clone(this, DataStoreItem.class);
         callback.call();
-        datastore.notifyObserversOfMutation(this);
+        datastore.notifyObserversOfMutation(this, clonedItem);
         return this;
     }
 }
