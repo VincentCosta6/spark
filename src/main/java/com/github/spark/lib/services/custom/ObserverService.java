@@ -1,6 +1,5 @@
 package com.github.spark.lib.services.custom;
 
-import com.github.spark.lib.datastores.DataStoreItem;
 import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.services.annotations.Service;
 import com.google.inject.Inject;

@@ -1,6 +1,6 @@
 package com.github.spark.lib.observables.registry;
 
-import com.github.spark.lib.SparkContext;
+import com.github.spark.lib.common.SparkContext;
 import java.util.logging.Level;
 import com.github.spark.lib.framework.Framework;
 import com.github.spark.lib.observables.annotations.ObserveMutation;
@@ -26,7 +26,7 @@ public final class ObservableReflection {
             Service serviceAnnotation = methodClass.getAnnotation(Service.class);
 
             if (serviceAnnotation != null) {
-                Object serviceInstance = framework.serviceRegistry.getItem(methodClass);
+                Object serviceInstance = framework.serviceRegistry.get(methodClass);
                 callbackMethod.setAccessible(true);
 
                 Class<?> parameterClass = null;

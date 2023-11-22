@@ -15,6 +15,6 @@ public class CommandRegistry extends Registry<String, CommandNode> {
     @Override
     public void findAndRegisterItems() {
         ArrayList<CommandNode> commands = CommandReflection.findCommandNodes(framework);
-        commands.forEach(commandNode -> addItem(commandNode.getName(), commandNode));
+        commands.forEach(commandNode -> add(commandNode.getName(), commandNode));
     }
 }

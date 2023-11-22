@@ -19,11 +19,11 @@ public abstract class Registry<K, V> {
         return this.items.values().iterator();
     }
 
-    public V addItem(K key, V item) {
+    public V add(K key, V item) {
         return items.put(key, item);
     }
 
-    public V getItem(K key) {
+    public V get(K key) {
         return items.get(key);
     }
 
