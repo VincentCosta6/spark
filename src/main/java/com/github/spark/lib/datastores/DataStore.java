@@ -1,16 +1,20 @@
 package com.github.spark.lib.datastores;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.spark.lib.services.custom.ObserverService;
 import com.google.inject.Inject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,9 +28,12 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
 
     @Inject private transient ObserverService observerService;
 
+    @JsonIgnore
     public transient Field cachedPrimaryKey;
+    @JsonIgnore
     private transient boolean isDirty = false;
 
+    @JsonProperty("values")
     private HashMap<String, T> map = new HashMap<>();
     private String name = this.getClass().getSimpleName();
     private int version = 0;
@@ -98,6 +105,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     public void onItemRemoved(T oldItem) {}
     public void onItemMutated(T item) {}
 
+    @JsonIgnore
     public Iterator<T> getIterator() {
         return map.values().iterator();
     }
@@ -105,7 +113,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     @Override
     public void onSave(File folder) {
         try {
-            String fileName = name + ".store";
+            String fileName = name + ".store.json";
 
             File fileToWrite;
             File[] files = folder.listFiles();
@@ -126,8 +134,10 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
                 fileToWrite.createNewFile();
             }
 
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileToWrite))) {
-                oos.writeObject(this);
+            try (OutputStreamWriter oos = new OutputStreamWriter(new FileOutputStream(fileToWrite), StandardCharsets.UTF_8)) {
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(this);
+                oos.write(json);
                 isDirty = false;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -140,7 +150,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     @Override
     public void onLoad(File folder) {
         try {
-            String fileName = name + ".store";
+            String fileName = name + ".store.json";
 
             File fileToRead;
             File[] files = folder.listFiles();
@@ -159,17 +169,24 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
                 return;
             }
 
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileToRead))) {
-                DataStore<T> dataStoreInFile = (DataStore<T>) ois.readObject();
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                try (InputStreamReader reader = new InputStreamReader(
+                        new FileInputStream(fileToRead), StandardCharsets.UTF_8)) {
 
-                for(T item : dataStoreInFile.map.values()) {
-                    map.put((String) cachedPrimaryKey.get(item), item);
-                    item.setDatastore(this);
+                    DataStore<T> dataStoreInFile = (DataStore<T>) mapper.readValue(reader, DataStore.class);
+
+                    for(T item : dataStoreInFile.map.values()) {
+                        map.put((String) cachedPrimaryKey.get(item), item);
+                        item.setDatastore(this);
+                    }
+                    setName(dataStoreInFile.getName());
+                    setVersion(dataStoreInFile.getVersion());
+                } catch (Exception e) {
+
                 }
-                setName(dataStoreInFile.getName());
-                setVersion(dataStoreInFile.getVersion());
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,6 +217,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         onItemMutated((T) item);
     }
 
+    @JsonIgnore
     public boolean isDirty() {
         return isDirty;
     }
