@@ -103,6 +103,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
     public void onDateStoreCleared() {}
     public void onItemCreated(T newItem) {}
     public void onItemRemoved(T oldItem) {}
+    public void onItemMutated(T item) {}
     public void onItemMutated(T item, T oldState) {}
 
     @JsonIgnore
@@ -215,6 +216,7 @@ public abstract class DataStore<T extends DataStoreItem> implements DataStoreI, 
         isDirty = true;
         observerService.notifyObserverOfMutation(item.getClass(), item, oldState);
         onItemMutated((T) item, (T) oldState);
+        onItemMutated((T) item);
     }
 
     @JsonIgnore

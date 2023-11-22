@@ -37,7 +37,12 @@ public class ObservableRegistry extends Registry<Class<?>, ArrayList<MutationEve
 
         observers.forEach(observer -> {
             try {
-                observer.method().invoke(observer.instance(), item, oldState);
+                int paramCount = observer.method().getParameterCount();
+                if (paramCount == 1) {
+                    observer.method().invoke(observer.instance(), item);
+                } else if(paramCount == 2) {
+                    observer.method().invoke(observer.instance(), item, oldState);
+                }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             } catch (InvocationTargetException e) {

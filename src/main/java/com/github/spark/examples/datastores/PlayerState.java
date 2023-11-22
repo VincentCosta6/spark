@@ -4,7 +4,7 @@ import com.github.spark.lib.datastores.DataStoreItem;
 import com.github.spark.lib.datastores.annotations.ItemKey;
 import org.bukkit.entity.Player;
 
-public class PlayerState extends DataStoreItem {
+public class PlayerState extends DataStoreItem<PlayerState> {
     @ItemKey public String playerId;
     public int magicka = 100;
     public float cash = 10000.0f;
